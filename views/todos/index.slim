@@ -1,4 +1,9 @@
-h2 Alla dina todos  #{session[:id]}!
+h2 Alla dina todos!
 
-- todos.each do |todo|
-    p = todo["content"]
+ol
+  - todos.each do |todo|
+    li 
+      a href="todos/#{todo['todo_id']}" #{todo['Title']}
+      a href="todos/#{album['todo_id']}/edit" Uppdatera
+      form method="POST" action="todos/#{todo['todo_id']}/delete"
+        input type="submit" value="Delete"

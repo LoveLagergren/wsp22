@@ -71,21 +71,21 @@ get('/todos/new') do
 end
 
 post('/todos/new') do
+  title = params[:title]
   content = params[:content]
-  artist_id = params[:artist_id].to_i
-  db = SQLite3::Database.new("db/chinook-crud.db")
-  db.execute("INSERT INTO albums (Title, ArtistId) VALUES (?,?)",title, artist_id)
-  redirect('/albums')
+  db = SQLite3::Database.new("db/todolist.db")
+  db.execute("INSERT INTO todos (title, content) VALUES (?,?)",title, content)
+  redirect('/todos')
 end
 
-post('/albums/:id/delete') do
+post('/todos/:id/delete') do
   id = params[:id].to_i
-  db = SQLite3::Database.new("db/chinook-crud.db")
+  db = SQLite3::Database.new("db/todolist.db")
   db.execute("DELETE FROM albums WHERE ArtistId = ?",id)
   redirect('/albums')
 end
 
-post('/albums/:id/update') do
+post('/todos/:id/update') do
   id = params[:id].to_i
   title = params[:title]
   artist_id = params[:artistId].to_i
