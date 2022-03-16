@@ -3,7 +3,8 @@ h2 Alla dina todos!
 ol
   - todos.each do |todo|
     li 
-      a href="todos/#{todo['todo_id']}" #{todo['Title']}
-      a href="todos/#{album['todo_id']}/edit" Uppdatera
-      form method="POST" action="todos/#{todo['todo_id']}/delete"
-        input type="submit" value="Delete"
+      a href="todos/#{todo['user_id']}" #{todo['title']}
+      form action="todos/#{todo['user_id']}/edit"
+        input type="submit" value="Uppdatera"
+      form method="POST" action="todos/#{todo['id']}/delete"
+        input type="submit" value="Radera"

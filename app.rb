@@ -61,9 +61,6 @@ get('/todos') do
   result = db.execute("SELECT * FROM todos")
   p result
   slim(:"todos/index",locals:{todos:result})
-
-
-
 end
 
 get('/todos/new') do
@@ -73,41 +70,42 @@ end
 post('/todos/new') do
   title = params[:title]
   content = params[:content]
+  user_id = session[:id]
   db = SQLite3::Database.new("db/todolist.db")
-  db.execute("INSERT INTO todos (title, content) VALUES (?,?)",title, content)
+  db.execute("INSERT INTO todos (title, content, user_id) VALUES (?,?,?)",title, content, user_id)
   redirect('/todos')
 end
 
 post('/todos/:id/delete') do
   id = params[:id].to_i
   db = SQLite3::Database.new("db/todolist.db")
-  db.execute("DELETE FROM albums WHERE ArtistId = ?",id)
-  redirect('/albums')
+  db.execute("DELETE FROM todos WHERE id = ?",id)
+  redirect('/todos')
 end
 
 post('/todos/:id/update') do
   id = params[:id].to_i
   title = params[:title]
-  artist_id = params[:artistId].to_i
-  db = SQLite3::Database.new("db/chinook-crud.db")
-  db.execute("UPDATE albums SET Title=?,ArtistId=? WHERE AlbumId = ?",title,artist_id,id)
-  redirect('/albums')
+  content = params[:content]
+  db = SQLite3::Database.new("db/todolist.db")
+  db.execute("UPDATE todos SET title=?,content=? WHERE user_id = ?",title,content,id)
+  redirect('/todos')
 end
 
-get('/albums/:id/edit') do
+get('/todos/:id/edit') do
   id = params[:id].to_i
-  db = SQLite3::Database.new("db/chinook-crud.db")
+  db = SQLite3::Database.new("db/todolist.db")
   db.results_as_hash = true
-  result = db.execute("SELECT * FROM albums WHERE AlbumId = ?",id).first
-  slim(:"/albums/edit",locals:{result:result})
+  result = db.execute("SELECT * FROM todos WHERE user_id = ?",id).first
+  slim(:"/todos/edit",locals:{result:result})
 end
 
-get('/albums/:id') do
+get('/todos/:id') do
   id = params[:id].to_i
-  db = SQLite3::Database.new("db/chinook-crud.db")
+  db = SQLite3::Database.new("db/todolist.db")
   db.results_as_hash = true
-  result = db.execute("SELECT * FROM albums WHERE AlbumId = ?",id).first
-  result2 = db.execute("SELECT Name FROM Artists WHERE ArtistID IN (SELECT ArtistId FROM Albums WHERE AlbumId = ?)",id).first
-  slim(:"albums/show",locals:{result:result,result2:result2})
+  result = db.execute("SELECT * FROM todos WHERE user_id = ?",id).first
+  result2 = db.execute("SELECT username FROM users WHERE id IN (SELECT id FROM todos WHERE user_id = ?)",id).first
+  slim(:"todos/show",locals:{result:result,result2:result2})
 end
 
