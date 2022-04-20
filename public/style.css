@@ -1,14 +1,19 @@
-nav {
+nav {   
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
     background-color: aqua;
     display: flex;
-    justify-content: center;
-    box-sizing: border-box;
 }
 
 nav > a {
-    padding: 50px 150px;
-    text-decoration: solid;
-    font-size: large;
+    display: block;
     color: black;
-    font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    text-align: center;
+    padding: 25px 178px;
+    text-decoration: none;
+}
+
+nav > a:hover {
+    background-color: grey;
 }
